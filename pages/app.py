@@ -12,7 +12,7 @@ import qdrant_client
 from htmlTemplates import css, bot_template, user_template
 from langchain.prompts import PromptTemplate
 
-# 定义用于生成问题回答的模板
+# Define templates for generating responses to questions
 template_v1 = PromptTemplate(
     template="""Answer the questions based on the following document context. 
     Please quote as much of the document as possible and make sure your answer is concise. 
@@ -21,7 +21,7 @@ template_v1 = PromptTemplate(
 )
 
 def get_pdf_text(pdf_docs):
-    # 从多个PDF文件中提取文本
+    # Extract text from multiple PDF files
     text = ""
     for pdf in pdf_docs:
         pdf_reader = PdfReader(pdf)
@@ -32,7 +32,7 @@ def get_pdf_text(pdf_docs):
     return text.strip()
 
 def get_text_chunks(raw_text):
-    # 将长文本分割成适合处理的大小
+    # Split long text into sizes suitable for processing
     text_splitter = CharacterTextSplitter(
         separator="\n",
         chunk_size=1000,
@@ -42,7 +42,7 @@ def get_text_chunks(raw_text):
     return text_splitter.split_text(raw_text)
 
 def get_vectorstore(text_chunks, use_qdrant=True):
-    # 根据文本块创建或更新向量存储
+    # Create or update a vector store based on a block of text
     embeddings = OpenAIEmbeddings()
     if use_qdrant:
         client = qdrant_client.QdrantClient(
@@ -57,7 +57,7 @@ def get_vectorstore(text_chunks, use_qdrant=True):
     return vectorstore
 
 def get_conversation_chain(vectorstore):
-    # 创建一个会话链，结合LLM和检索器
+    # Creating a session chain, combining LLM and a retriever
     llm = ChatOpenAI()
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
     conversation_chain = ConversationalRetrievalChain.from_llm(
@@ -68,8 +68,8 @@ def get_conversation_chain(vectorstore):
     return conversation_chain
 
 def handle_userinput(user_question, pdf_text):
-    # 处理用户输入，并通过Streamlit显示回答
-    full_prompt = template_v1.format(context=pdf_text, question=user_question)  # 使用文档内容和用户问题生成完整提示
+    # Processes user input and displays responses via Streamlit
+    full_prompt = template_v1.format(context=pdf_text, question=user_question)  # Generate complete prompts using document content and user questions
     response = st.session_state.conversation({'question': full_prompt})
     st.session_state.chat_history = response['chat_history']
 
