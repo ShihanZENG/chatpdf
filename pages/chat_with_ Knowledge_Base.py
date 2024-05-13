@@ -1,9 +1,9 @@
 from dotenv import load_dotenv
 import streamlit as st
-from langchain_community.chains import RetrievalQA 
-from langchain_community.llms import OpenAI
-from langchain_community.vectorstores import Qdrant
-from langchain_community.embeddings import OpenAIEmbeddings
+from langchain.chains import RetrievalQA
+from langchain.llms import OpenAI
+from langchain.vectorstores import Qdrant
+from langchain.embeddings.openai import OpenAIEmbeddings
 import qdrant_client
 import os
 
@@ -63,3 +63,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
