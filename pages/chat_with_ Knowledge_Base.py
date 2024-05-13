@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import streamlit as st
 from langchain.chains import RetrievalQA
-from langchain.llms import OpenAI
+from langchain_community.llms import OpenAI
 from langchain.vectorstores import Qdrant
 from langchain.embeddings.openai import OpenAIEmbeddings
 import qdrant_client
